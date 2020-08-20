@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema({
         minlength: 5,
         maxlength: 20
       }, 
+    types: {
+        type: [String],
+        required: true,
+    },
 })
 const User = mongoose.model('User', userSchema);
 

@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 
-bcrypt.hash("test24",12,(err,hash)=>{
+bcrypt.hash("lösenord",12,(err,hash)=>{
 
     console.log(hash);
 

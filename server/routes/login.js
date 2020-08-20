@@ -10,17 +10,18 @@ router.get("/", async (req,res) => {
 })
 
 router.post("/", async (req,res) => {
-
-    let userExists = await User.find( { username: req.body.username } )
-    if(userExists.length === 1)
+    console.log(req.headers)
+    let user = await User.find( { username: req.body.username } )
+    if(user.length === 1)
     {
         try {
-            const pwCheck = await bcrypt.compare(req.body.password,userExists[0].password);
+            const pwCheck = await bcrypt.compare(req.body.password,user[0].password);
             if(pwCheck){
                 let userObject = {
-                    uid:userExists[0]._id,
+                    uid:user[0]._id,
                     admin:false,
-                    username:userExists[0].username
+                    username:user[0].username,
+                    types: user[0].types
                 }
                 const token = jwt.sign(userObject, process.env.FIRSTSECRET, {expiresIn:120000});
                 res.cookie('token',token,{httpOnly:true,sameSite:'strict'});

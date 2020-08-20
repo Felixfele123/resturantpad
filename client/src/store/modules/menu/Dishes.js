@@ -16,8 +16,7 @@ const state = {
 
   const actions = {
     //fetch userdata from database (based on client-token)
-      async fetchMenu({commit, rootState}){
-        console.log(rootState)
+      async fetchMenu({commit}){
         const response = await axios({
             method: 'get',
             url: 'http://localhost:3456/menu',
@@ -38,6 +37,7 @@ const state = {
               description: object.description,
               uid: object.userID
             },
+            withCredentials: true
           })
           commit('addDishSuccess', "Added dish successfully");
         } catch (error) {

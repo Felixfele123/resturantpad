@@ -26,22 +26,58 @@ router.get('/', async (req, res) => {
     }
 });
 
+/*router.post('/', async (req, res) => {
+    const token = req.cookies.token;
+    if(token){
+        const verified = jwt.verify(token,process.env.FIRSTSECRET);
+        req.token = verified;
+
+        try {
+            const course = new Menu({
+                name: req.body.name,
+                ingredients: req.body.ingredients, 
+                type: req.body.type,
+                price: req.body.price,
+                description: req.body.description,
+                userID: verified.uid
+            });
+            const result = await course.save()
+            res.send(result)
+            console.log(result)
+        } catch (error) {
+            return res.status(400).send({
+                message: error.message
+            });
+        }
+    }else{
+        res.send("/login?mes=No_Token_Provided");
+    }
+});*/
+
 router.post('/', async (req, res) => {
-    const course = new Menu({
-        name: req.body.name,
-        ingredients: req.body.ingredients, 
-        type: req.body.type,
-        price: req.body.price,
-        description: req.body.description,
-        userID: req.body.uid
-    });
-    try {
-        const result = await course.save()
-        res.send(result)
-    } catch (error) {
-        return res.status(400).send({
-            message: error.message
-         });
+    const token = req.cookies.token;
+    if(token){
+        const verified = jwt.verify(token,process.env.FIRSTSECRET);
+        req.token = verified;
+        try {
+            const course = new Menu({
+                name: req.body.name,
+                ingredients: req.body.ingredients, 
+                type: req.body.type,
+                price: req.body.price,
+                description: req.body.description,
+                userID: verified.uid
+            });
+            const result = await course.save()
+            res.send(result)
+            console.log(result)
+        } catch (error) {
+            return res.status(400).send({
+                message: error.message
+            });
+        }
+    }else{
+        res.send("/login?mes=No_Token_Provided");
     }
 });
 

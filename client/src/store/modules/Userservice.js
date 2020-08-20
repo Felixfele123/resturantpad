@@ -21,7 +21,7 @@ const state = {
                 url: 'http://localhost:3456/login',
                 data: {
                   username: object.username,
-                  password: object.password
+                  password: object.password,
                 },
                 withCredentials: true
               });
@@ -30,7 +30,25 @@ const state = {
              errorHandling(error) 
           }
         },
+        async auth({commit}){
+          try {
+            commit('setStatus', 'loading')
+            const response = await axios({
+              method: 'get',
+              url: 'http://localhost:3456/secret/',
+              withCredentials: true
+          });
+            commit('setToken', response)
+            console.log();
+            
+            
+          } catch (error) {
+             errorHandling(error) 
+          }
+        },
   };
+    //fetch userdata from database (based on client-token)
+
 
   const mutations = {
     setStatus: (state, status) => (state.status = status),

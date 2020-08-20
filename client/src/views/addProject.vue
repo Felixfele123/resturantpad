@@ -1,26 +1,18 @@
 <template>
-    <div class="container" fluid fill-height>
+    <div class="container" fluid>
         <h1 v-if="!dish" class="title grey--text">Lägg till ny pizza, sallad eller meny</h1>
         <h1 v-else class="title grey--text">{{dish.name}}</h1>
-        <v-row fluid class="justify-center">
+        <v-row  class="justify-center">
           <v-col cols="5" class="mx-5">
             <h1 class="subtitle-1 grey--text">typ</h1>
-            <v-radio-group v-on:change="radioCheck()" mandatory class="justify-center text-center " v-model="radios" row>
+            <v-radio-group mandatory class="justify-center text-center " v-model="radios" row>
               <v-row >
-                <v-col >
-                  <v-radio label="Pizza"  value="pizza"></v-radio>
-                </v-col>
-                <v-col>
-                  <v-radio label="Sallad" value="sallad"></v-radio>
-                </v-col>
-                <v-col>
-                  <v-radio label="Meny" value="meny"></v-radio> 
+                <v-col v-for="(type, i) in user.data.types" :key="i">
+                  <v-radio :label="type" :value="type"></v-radio>
                 </v-col>
               </v-row>
-  
             </v-radio-group>
             <h1 class="subtitle-1 grey--text mt-0">Pris</h1>
-
               <input type="text" placeholder="Anpassat pris" v-model="anpassatPris">
           </v-col>
           <v-col cols="5" class="">
@@ -81,6 +73,7 @@
       this.addDishSuccess(null)
     },
     created: function () {
+      console.log(this.user)
         if(this.dish){
           this.radios = this.dish.radios
           this.ingredienser = this.dish.ingredients
@@ -143,8 +136,10 @@
       },
       pushMenu(){
         this.$router.push({ name: 'dashboard' })
+      },
+      radioCheck(){
+        console.log(this.radios)
       }
-      
     }
   }
   
@@ -156,9 +151,6 @@ input:focus{
 }
 .field{
   display: flex;
-}
-.full-height{
-  height: 20%;
 }
 
 </style>

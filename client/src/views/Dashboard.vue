@@ -1,11 +1,9 @@
 <template>
     <div class="dashboard">
         <h1 class="subtitle-1 grey--text">Dashboard</h1>
-
         <v-container >
-            <v-row class="mb-3">
+            <v-row class="mb-3 fixed">
                 <span class="subtitle-1 grey--text">Sort by:</span>
-                
                 <v-btn small text class="mx-2" @click="sortBy('title')">
                     <v-icon left small>mdi-folder</v-icon>
                     <span class="caption text-lowercase  grey--text">Project</span>
@@ -21,11 +19,11 @@
                     </v-btn>
                 </v-col>
                 <v-col class="pb-0" cols="6" sm="6" md="4">
-                    <input type="text" id="fname" name="firstname" placeholder="Your name..">
+                    <input type="text" id="fname" name="firstname" v-model="search" placeholder="search..">
                   </v-col>
             </v-row>
                 <v-expansion-panels accordion>
-                    <v-expansion-panel v-for="dish in menu" :key="dish._id" wrap :class="`pa-1 my-2 dish-${dish.status}`" accordion>
+                    <v-expansion-panel v-for="dish in filteredList" :key="dish._id" wrap :class="`pa-1 my-2 dish-${dish.status}`" accordion>
                         <v-expansion-panel-header accordion >
                                 <v-flex xs12 sm12 md3>
                                     <div class="caption grey--text">namn</div>
@@ -66,24 +64,19 @@
                         </v-expansion-panel-content>
                     </v-expansion-panel>
                 </v-expansion-panels>
-
-
-
-                
                 <v-dialog v-model="dialog" v-on:change="log()" max-width="500">
-                            <v-alert v-if="error" max-width="500" class="ma-0" type="error">
-                                <v-row >
-                                    <v-col>
-                                        {{error}}
-                                    </v-col>
-                                    <v-col class="text-right">
-                                        <v-btn icon dark @click="dialog = false">
-                                            <v-icon>mdi-close</v-icon>
-                                        </v-btn>
-                                    </v-col>
-                                </v-row>
-                            </v-alert>
-
+                    <v-alert v-if="error" max-width="500" class="ma-0" type="error">
+                        <v-row >
+                            <v-col>
+                                {{error}}
+                            </v-col>
+                            <v-col class="text-right">
+                                <v-btn icon dark @click="dialog = false">
+                                    <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-alert>
                 </v-dialog>
         </v-container>
     </div>
@@ -106,6 +99,7 @@ export default {
         acc:[],
         dialog: false,
         namn: false,
+        search: ''
         }
     },
     watch: {
@@ -115,6 +109,11 @@ export default {
     },
     computed: {
         ...mapGetters(['menu', 'error']),
+        filteredList() {
+            return this.menu.filter(post => {
+                return post.name.toLowerCase().includes(this.search.toLowerCase())
+            })
+        }
     },
     created: async function () {
         await this.fetchMenu()
@@ -181,7 +180,7 @@ export default {
         align-items: center;
     }
     .dish-updated {
-        border-left: 5px solid #1ef002;
+        border-left: 5px solid #04c90a;
     }
     .dish-warning {
         border-left: 5px solid orange;

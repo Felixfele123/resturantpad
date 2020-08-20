@@ -1,7 +1,7 @@
 <template>
   <v-app class="grey lighten-4">
-    <Navbar v-if="this.$route.path !== '/login'"/>
     <previewTools v-if="this.$route.path == '/preview'"/>
+    <Navbar v-if="this.$route.path !== '/login'"/>
       <v-content v-if="this.$route.path !== '/login'" class="mx-4">
         <router-view></router-view>
       </v-content>
@@ -12,8 +12,9 @@
 <script>
 import Navbar from './components/Navbar'
 import previewTools from './components/previewTools'
+import {mapActions} from 'vuex';
 export default {
-  components: { Navbar, previewTools },
+  components: { Navbar, previewTools},
   name: 'App',
   data () {
     return {
@@ -25,7 +26,15 @@ export default {
         ],
         mini: true,
     }
-  }
+  },
+  methods: {
+    ...mapActions(["auth"]),
+  },
+  created: async function () {
+        await this.auth()
+        console.log('created');
+        
+    },
 }
 </script>
 <style>

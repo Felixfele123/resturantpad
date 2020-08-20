@@ -110,8 +110,4 @@ export default {
 </script>
 
 <style>
-canvas{
-    position: absolute;
-    z-index: -1;
-}
 </style>

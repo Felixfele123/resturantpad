@@ -1,7 +1,8 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
-import menu from './modules/menu.js'
-import login from './modules/login.js'
+import Dishes from './modules/menu/Dishes.js'
+import Design from  './modules/menu/Design.js'
+import Userservice from './modules/Userservice.js'
 import createPersistedState from 'vuex-persistedstate'
 //import game from './modules/game'
 
@@ -13,7 +14,8 @@ export default new Vuex.Store({
         storage: window.sessionStorage,
     })],
     modules: {
-        menu,
-        login
+        Dishes,
+        Design,
+        Userservice
     }
 })

@@ -1,86 +1,62 @@
 <template>
     <div>
 
-        <v-row class="justify-center marginmain">
-        <v-col cols="7" class="mx-8">
-            <v-card class="font-italic">
-                <v-card-title class=" justify-center">
-                    <p class="text-center">Menu</p>
+        <v-row class="justify-center mt-12">
+        <v-col sm="10" md="8" lg="8" cols="10" class="mx-8">
+            <v-card :style="`font-family: ${font};`" :color="activeColors.primary">
+                <v-card-title @click="log()" :style="`color: ${activeColors.secondary}; font-weight: ${fontWeight}`" class="justify-center">
+                    <h4 class="text-center">Menu</h4>
                 </v-card-title>
-                <v-card-title class=" justify-center">
-                    <p class="text-center">pizza</p>
-                </v-card-title>
-                <v-row v-for="pizza in pizzas" :key="pizza._id">
-                    <v-col cols="2" class="pa-0 text-right">
-                        <v-card-text  class="">1.</v-card-text>
-                    </v-col>
-                    <v-col cols="4 px-0">
-                        <v-card-text>{{pizza.name}}</v-card-text>
-                    </v-col >
-                    <v-col cols="5" class="text-right">
-                        <v-card-text>{{pizza.price}}</v-card-text>
-                    </v-col>
-                </v-row>
-                <v-card-title class=" justify-center">
-                    <p class="text-center">meny</p>
-                </v-card-title>
-                <v-row v-for="menu in menus" :key="menu._id">
-                    <v-col cols="2" class="pa-0 text-right">
-                        <v-card-text  class="">1.</v-card-text>
-                    </v-col>
-                    <v-col cols="4 px-0">
-                        <v-card-text>{{menu.name}}</v-card-text>
-                    </v-col >
-                    <v-col cols="5" class="text-right">
-                        <v-card-text>{{menu.price}}</v-card-text>
-                    </v-col>
-                </v-row>
-                <v-card-title class=" justify-center">
-                    <p class="text-center">sallad</p>
-                </v-card-title>
-                <v-row v-for="salad in salads" :key="salad._id">
-                    <v-col cols="2" class="pa-0 text-right">
-                        <v-card-text  class="">1.</v-card-text>
-                    </v-col>
-                    <v-col cols="4 px-0">
-                        <v-card-text>{{salad.name}}</v-card-text>
-                    </v-col >
-                    <v-col cols="5" class="text-right">
-                        <v-card-text>{{salad.price}}</v-card-text>
-                    </v-col>
-                </v-row>
+                <div v-for="(type, i) in user.data.types" :key="i">
+                    <v-card-title class="justify-center red--text">
+                        <p class="text-center" :style="`color: ${activeColors.third}`">{{type}}</p>
+                    </v-card-title>
+                    <div v-for="(dish, i) in menu" :key="i" :style="`color: ${activeColors.secondary}`">
+                    <v-row  class="mb-0 justify-center" >
+                        <v-col v-if="dish.type === type" class="text-left  px-0" cols="7">
+                            <h6>1. {{dish.name}}</h6>
+                        </v-col>
+                        <v-col v-if="dish.type === type" cols="2" class="text-right  px-0">
+                            <v-card-text>{{dish.price}} :-</v-card-text>
+                        </v-col>
+                    </v-row>      
+                    <v-row class="justify-center" v-if="dish.type === type">
+                        <v-col cols="9" class="text-left px-0">
+                            <span class="caption pl-2" v-for="(ing, index) in dish.ingredients" :key="index">{{ing}}<span v-if="dish.ingredients[index + 1]">, </span></span>
+                        </v-col>
+                    </v-row>  
+                    </div>
+                </div>
           </v-card>
         </v-col>       
-        <v-col cols="3">
-            <div class="sticky">I will stick to the screen when you reach my scroll position</div>
-        </v-col>
         </v-row>
     </div>
 </template>
   
   <script>
-    import {mapGetters} from 'vuex';
+    import { mapGetters } from 'vuex';
     export default {
-      computed: {
-        ...mapGetters(['menu']),
-        pizzas(){return this.menu.filter(pizza => pizza.type === 'pizza')},
-        menus(){return this.menu.filter(pizza => pizza.type === 'meny')},
-        salads(){return this.menu.filter(pizza => pizza.type === 'sallad')},
-      },
       data () {
-      return {
-        fonts: [
-        { name: 'Arial' },
-        { name: 'Times New Roman' },
-        { name: 'Courier New' },
-      ],
-      }
+        return {
+        }
     },
+    computed: {
+        ...mapGetters(['menu', 'user', 'font', 'activeColors', 'fontWeight']),
+        },
+    created: function(){
+        console.log(this.fontWeight)
+        },
+    methods: {
+            log(){
+                console.log(this.fontWeight)
+            }        
+        }
     }
   </script>
   <style >
       .full-height{
-          height: 500px;
+          height: 100px;
+          overflow-y: scroll;
       }
       .sidenav {
         width: 130px;
@@ -92,29 +68,11 @@
         overflow-x: hidden;
         padding: 8px 0;
     }
-
-    .sidenav a {
-    padding: 6px 8px 6px 16px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #2196F3;
-    display: block;
+    .thicker {
+    font-weight: 900;
     }
-    .sidenav a:hover {
-    color: #064579;
-    }
-    .sticky{
-        position: sticky;
-        height: 300 !important;
-        padding-top: 40px;
-    }
-    div.sticky {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-    background-color: yellow;
-    padding: 50px;
-    font-size: 20px;
+    .border {
+        border-bottom: 1px solid white;
     }
 
   </style>
